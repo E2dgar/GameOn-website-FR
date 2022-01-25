@@ -5,6 +5,7 @@
   --primary-color: #FF0000;
 
   --f40: 2.5rem;
+  --f20: 1.25rem;
   --f18: 1.125rem;
 }
 * {
@@ -34,7 +35,7 @@ p {
 }
 
 .topnav {
-  overflow: hidden;
+  /*overflow: hidden;*/
   /*margin: 3.5%;*/
 
   display: flex;
@@ -45,18 +46,20 @@ p {
   width: 100%;
   /*padding-left: calc((1400px - 1240px) / 2);
   margin: 60px 30px;*/
-  padding: 2rem 0 2rem 80px;
+  padding-left: 80px;
 }
 .header-logo {
-    float: left;
+    padding: 2rem 0;
 }
 .main-navbar {
-    float: right;
+    /*float: right;*/
 
     padding: .5rem 0;
+    display: flex;
+
 }
 .topnav a {
-  float: left;
+  /*float: left;*****/
   display: block;
   color: #000000;
   text-align: center;
@@ -68,6 +71,13 @@ p {
 
 .topnav .fa {
   color: var(--primary-color);
+  text-align: center;
+  line-height: var(--f20);
+  font-size: var(--f20);
+}
+
+.topnav .fa-close {
+  display: none;
 }
 
 .topnav a:hover {
@@ -87,6 +97,9 @@ p {
 
 .topnav .icon {
   display: none;
+  min-height: 44px;
+  min-width: 44px;
+  align-items: center;
 }
 
 @media screen and (max-width: 1460px) {
@@ -100,8 +113,13 @@ p {
   }
   .topnav a {display: none;}
   .topnav a.icon {
-    float: right;
+    /*float: right;*/
     display: block;
+    
+    padding: .68rem;
+  }
+  .topnav .icon {
+    display: flex;
   }
 }
 
@@ -110,12 +128,30 @@ p {
   .topnav.responsive .icon {
     position: absolute;
     right: 0;
-    top: 0;
+    bottom: 100%;
   }
   .topnav.responsive a {
-    float: none;
+    /*float: none;*/
     display: block;
     text-align: left;
+  }
+
+  /*****************/
+  .topnav.responsive .main-navbar {
+    display: block;
+    position :absolute;
+    top: calc(100% - 1.25rem);
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 0 5px grey;
+    padding: 1rem;
+    background: #FFF;
+  }
+  .topnav.responsive .fa-bars {
+    display: none;
+  }
+  .topnav.responsive .fa-close {
+    display: block;
   }
 }
 
@@ -124,7 +160,7 @@ p {
  @media screen and (max-width: 540px) {
   .topnav a {display: none;}
   .topnav a.icon {
-    float: right;
+    /*float: right;*****/
     display: block;
    /* margin-top: -15px;*/
   }
