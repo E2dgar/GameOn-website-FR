@@ -11,6 +11,8 @@
   --f24: 1.5rem;
   --f20: 1.25rem;
   --f18: 1.125rem;
+  --f13: 0.82rem;
+  --f10: 0.625rem;
 }
 * {
   box-sizing: border-box;
@@ -18,6 +20,7 @@
 /* Landing Page */
 
 body {
+  min-height: 100vh;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -247,7 +250,7 @@ main {
   max-width: 500px;
   animation-name: modalopen;
   animation-duration: var(--modal-duration);
-  /*background: #232323;*/
+  background: #232323;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -489,12 +492,12 @@ input[data-error]::after {
 }
 .hero-content {
   padding: 51px 56px;
-  grid-column: 1 / 5;
+  grid-column: 1 / 6;
   /*background: #232323;*/
   color: #fff;
   position: relative;
   text-align: left;
-  min-width: 424px;
+  /*min-width: 424px;*/
 
   display: flex;
   flex-direction: column;
@@ -517,13 +520,12 @@ input[data-error]::after {
   font-size: var(--f96);
   font-weight: normal;
   white-space: nowrap;
-  margin-top: 0;
+  margin: 0;
 }
 .hero-text {
-  width: 146%;
+  width: 30ch;
   font-size: var(--f24);
   line-height: 1.33;
-  margin-top: 57px;
   padding: 0;
 }
 .btn-signup {
@@ -532,12 +534,12 @@ input[data-error]::after {
   padding: 15px 23px;
   margin: 0;
   margin-top: 59px;
-}
-.btn-signup::first-letter {
-  text-transform: uppercase;
+  width: max-content;
+  
+  text-transform: capitalize;
 }
 .hero-img {
-  grid-column: 5 / 13;
+  grid-column: 6 / 13;
 }
 .hero-img img {
   width: 100%;
@@ -548,6 +550,10 @@ input[data-error]::after {
   padding: 0;
   margin-left: auto;
 }
+
+footer {
+}
+
 .copyrights {
   color: #fe142f;
   padding: 0;
@@ -561,49 +567,11 @@ input[data-error]::after {
 footer {
   padding-left: 2vw;
   padding-right: 2vw;
-  margin: 0 20px;
+  
+  margin-top: auto;
+  margin-bottom: 1rem;
 }
-@media screen and (max-width: 992px) {
-  main {
-    padding: 0;
-  }
-  .hero-section {
-    display: block;
-    box-shadow: unset;
-  }
-  .hero-content {
-    background: #fff;
-    color: #000;
-    padding: 0;
-  }
-  .hero-content::after {
-    content: unset;
-  }
-  .hero-content .btn-signup {
-    display: none;
-  }
-  .hero-headline {
-    /*font-size: 4.5rem;*/
-    white-space: normal;
-  }
-  .hero-text {
-    width: unset;
-    font-size: 1.5rem;
-  }
-  .hero-img img {
-    border-radius: 10px;
-    margin-top: 40px;
-  }
-  .hero-section > .btn-signup {
-    display: block;
-    margin: 32px auto 10px;
-    padding: 12px 35px;
-  }
-  .copyrights {
-    margin-top: 50px;
-    text-align: center;
-  }
-}
+
 
 @keyframes modalopen {
   from {
@@ -617,13 +585,75 @@ footer {
 
 @media screen and (max-width: 1240px) {
   .hero-headline {
-    font-size: var(--f48);
+    font-size: var(--f64);
+  }
+
+  .hero-text {
+    font-size: var(--f18);
+  }
+}
+
+@media screen and (max-width: 992px) {
+  main {
+    padding: 0;
+    margin: 0;
+  }
+  .hero-section {
+    display: block;
+    background: #FFF;
+    box-shadow: unset;
+  }
+  .hero-content {
+    background: #fff;
+    color: #000;
+    padding: 0;
+  }
+  .hero-content::after {
+    content: unset;
+  }
+  .hero-content .btn-signup {
+    display: none;
+  }
+  .btn-signup {
+    font-size: var(--f14);
+  }
+  .hero-headline {
+    font-size: var(--f40);
+    white-space: normal;
+    margin-bottom: 1rem;
+  }
+  .hero-text {
+    width: 100%;
+    font-size: 1.5rem;
+    margin-top: 57px;
+  }
+  .hero-img img {
+    border-radius: 10px;
+    margin-top: 2rem;
+  }
+  .hero-section > .btn-signup {
+    display: block;
+    margin: 32px auto 10px;
+    padding: 12px 35px;
+  }
+
+  .copyrights {
+    margin: 0;
+    text-align: center;
   }
 }
 
 @media screen and (max-width: 768px){
   .hero-headline {
     font-size: var(--f40);
+  }
+  .hero-text {
+    font-size: var(--f13);
+    margin-top: 0;
+  }
+
+  .copyrights {
+    font-size: var(--f10);
   }
 }
 
