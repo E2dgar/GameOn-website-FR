@@ -246,8 +246,8 @@ main {
 
 .content {
   margin: 5% auto;
-  width: 100%;
-  max-width: 500px;
+  width: 95%;
+  max-width: 555px;
   animation-name: modalopen;
   animation-duration: var(--modal-duration);
   background: #232323;
@@ -268,7 +268,8 @@ label {
   font-size: 17px;
   font-weight: normal;
   display: inline-block;
-  margin-bottom: 11px;
+  margin-bottom: 1rem;
+  margin-top: 13px;
 }
 input {
   padding: 8px;
@@ -310,7 +311,7 @@ input[data-error]::after {
 .checkbox-label,
 .checkbox2-label {
   position: relative;
-  margin-left: 36px;
+  margin-left: 40px;
   font-size: 12px;
   font-weight: normal;
 }
@@ -551,9 +552,6 @@ input[data-error]::after {
   margin-left: auto;
 }
 
-footer {
-}
-
 .copyrights {
   color: #fe142f;
   padding: 0;
@@ -567,9 +565,9 @@ footer {
 footer {
   padding-left: 2vw;
   padding-right: 2vw;
-  
   margin-top: auto;
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 
