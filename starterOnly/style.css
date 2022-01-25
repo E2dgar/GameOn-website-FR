@@ -6,8 +6,6 @@
 }
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 /* Landing Page */
 
@@ -15,11 +13,11 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   background-image: url("background.png");
   font-family: var(--font-default);
-  font-size: 18px;
-  max-width: 1300px;
-  margin: 0 auto;
+  font-size: 1.125rem;
+  margin: 0 30px;
 }
 
 p {
@@ -27,30 +25,44 @@ p {
   padding: 0.5vw;
 }
 
-img {
-  padding-right: 1rem;
+.header-logo img {
+  /*padding-right: 1rem;*/
+  margin-right: 2rem;
 }
 
 .topnav {
   overflow: hidden;
-  margin: 3.5%;
+  /*margin: 3.5%;*/
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  width: 100%;
+  /*padding-left: calc((1400px - 1240px) / 2);
+  margin: 60px 30px;*/
+  padding: 2rem 0 2rem 80px;
 }
 .header-logo {
     float: left;
 }
 .main-navbar {
     float: right;
+
+    padding: .5rem 0;
 }
 .topnav a {
   float: left;
   display: block;
   color: #000000;
   text-align: center;
-  padding: 12px 12px;
+  padding: 12px 11px;
   margin: 5px;
   text-decoration: none;
-  font-size: 20px;
-  font-family: Roboto, sans-serif;
+  /*font-size: 20px;*/
+
+
 }
 
 .topnav a:hover {
@@ -69,6 +81,11 @@ img {
   display: none;
 }
 
+@media screen and (max-width: 1460px) {
+  .topnav {
+    padding-left: calc((100% - 1240px) / 2);
+  }
+}
 @media screen and (max-width: 768px) {
   .topnav a {display: none;}
   .topnav a.icon {
@@ -103,7 +120,7 @@ img {
 } 
 
 main {
-  font-size: 130%;
+  /*font-size: 130%;
   font-weight: bolder;
   color: black;
   padding-top: 0.5vw;
@@ -111,7 +128,10 @@ main {
   padding-right: 2vw;
   margin: 1px 20px 15px;
   border-radius: 2rem;
-  text-align: justify;
+  text-align: justify;*/
+
+  max-width: 1240px;
+  margin: 2rem auto;
 
 
 }
