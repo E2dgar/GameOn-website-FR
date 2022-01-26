@@ -57,33 +57,33 @@
           <span id="close-modal-btn" class="close"></span>
           <div class="modal-body">
             <form id="reserve" name="reserve" action="index.html" method="get">
-              <div class="formData">
+              <div class="formData firstname-formData">
                 <label for="firstname">Prénom</label><br>
-                <input class="text-control" type="text" id="firstname" name="firstname"/><br>
+                <input class="text-control" type="text" id="firstname" name="firstname"/>
               </div>
 
-              <div class="formData">
+              <div class="formData lastname-formData">
                 <label for="lastname">Nom</label><br>
-                <input class="text-control" type="text" id="lastname" name="lastname" /><br>
+                <input class="text-control" type="text" id="lastname" name="lastname" />
               </div>
 
-              <div class="formData">
+              <div class="formData mail-formData">
                 <label for="mail">E-mail</label><br>
-                <input class="text-control" type="email" id="mail" name="mail" /><br>
+                <input class="text-control" type="email" id="mail" name="mail" />
               </div>
 
-              <div class="formData">
+              <div class="formData birthdate-formData">
                 <label for="birthdate">Date de naissance</label><br>
-                <input class="text-control" type="date" id="birthdate" name="birthdate" max="2017-12-31"/><br>
+                <input class="text-control" type="date" id="birthdate" name="birthdate" max="2017-12-31"/>
               </div>
 
-              <div class="formData">
-                <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
+              <div class="formData quantity-formData">
+                <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label>
                 <input class="text-control" id="quantity" name="quantity">
               </div>
 
               <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
-              <div class="formData">
+              <div class="formData location-formData">
                 <input class="checkbox-input" type="radio" id="location1" name="location" value="New York"  />
                 <label class="checkbox-label" for="location1">
                   <span class="checkbox-icon"></span>
@@ -121,20 +121,20 @@
                 </label>
               </div>
 
-              <div class="formData">
-                <input class="checkbox-input" type="checkbox" id="cgu" checked />
+              <div class="formData cgu-formData">
+                <input class="checkbox-input" type="checkbox" id="cgu" name="cgu" checked />
                 <label class="checkbox2-label" for="cgu">
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
-                <br>
+              </div>
 
+              <div class="formData">
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />
                 <label class="checkbox2-label" for="checkbox2">
                   <span class="checkbox-icon"></span>
                   Je souhaite être prévenu des prochains évènements.
                 </label>
-                <br>
               </div>
 
               <input class="btn-submit button" type="submit" value="C'est parti" />
@@ -149,6 +149,6 @@
         Copyright 2014 - 2022, GameOn Inc.
       </p>
     </footer>
-    <script src="modal.js"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>

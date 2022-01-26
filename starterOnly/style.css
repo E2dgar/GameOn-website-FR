@@ -372,6 +372,12 @@ input[data-error]::after {
   left: 21%;
   top: 19%;
 }
+
+.error-message {
+  color: var(--primary-color);
+  margin: 0;
+}
+
 .close {
   position: absolute;
   right: 15px;
