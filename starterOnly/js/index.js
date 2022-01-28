@@ -1,4 +1,4 @@
-// BURGER MENU
+// *********************  BURGER MENU **********************
 const header = document.getElementsByTagName("header")[0];
 
 const burgerDisplay = () => {
@@ -9,12 +9,11 @@ const burgerDisplay = () => {
     header.className = "topnav";
   }
 } 
-
 //*********************************************************
 
 
 
-//MODALS DISPLAY
+//*********************RESERVATION FORM***********************************
 const modalbg = document.querySelector(".bground");
 const closeModalBtn = document.getElementById("close-modal-btn");
 const modalBtn = document.querySelectorAll(".modal-btn");
@@ -23,19 +22,17 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const launchModal = () => {
   modalbg.style.display = "block";
 }
+modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+
 const closeModal = () => {
   modalbg.style.display= "none";
 }
-
-// Modal events
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 closeModalBtn.addEventListener("click", closeModal);
-
-//********************************************************************
 
 
 //VALIDATION RESERVATION FORM
 let errorsForm = [];
+
 const errorMessages = {
   isRequired: "Ce champs est requis",
   minLength: "Veuillez entrez au moins 2 caractères pour ce champs",
@@ -46,7 +43,7 @@ const errorMessages = {
   cguUnchecked: "Vous devez acceptez les conditions d'utilisation pour continuer"
 
 }
-//Validation rules
+
 const validationRules = {
   length: 2,
   mailRegex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
@@ -62,10 +59,11 @@ const removeFromErrorsForm = input => {
 }
 
 //****************************SINGLE TESTS****************************//
-//Test if empty is empty
+//Test if is empty
 const isNotEmpty = (input) => {
   if(!input.value){
     errorsForm[input.name] = errorMessages.isRequired; 
+    console.log(errorsForm)
   } else {
     removeFromErrorsForm(input);
   }
@@ -74,7 +72,6 @@ const isNotEmpty = (input) => {
 
 //Test if text has min length
 const hasMinLength = input => {
-  console.log(isNotEmpty(input));
   if(input.value.length < validationRules.length) {
     errorsForm[input.name] = errorMessages.minLength;
   } else {
@@ -85,7 +82,6 @@ const hasMinLength = input => {
 //Test regex
 const matchRegex = (input, inputRegex, errorMessage) => {
   const regex = new RegExp(inputRegex);
-  console.log(regex.test(input.value));
   if(!regex.test(input.value)){
     errorsForm[input.name] = errorMessage;
   }
@@ -100,14 +96,13 @@ const dateRange = input => {
   const month = new Date().getMonth();
   const day = new Date().getDate();
 
+  //Age must be lower than 100years and higher than 5 years
   if(new Date(input.value) <= new Date(year - 100, month, day + 1) || new Date(input.value) > new Date(year - 5, month, day + 1)){
     errorsForm[input.name] = errorMessages.dateRange;
   } else {
     removeFromErrorsForm(input);
   }
 }
-
-
 //*********************************************************************//
 
 
@@ -138,7 +133,7 @@ const validateBirthdate = input => {
   dateRange(input);
 }
 
-//Validate quantity
+//Validate quantity = not empty and in range
 const validateQuantity = input => {
   if(!isNotEmpty(input)){
     return false;
@@ -163,23 +158,10 @@ const validateCheckbox = input => {
     removeFromErrorsForm(input);
   }  
 } 
-
-
 //*********************************************************************//
 
 
-
-
-
-
-
-
-const formData = document.querySelectorAll(".formData");
-
-const reserveForm = document.getElementById("reserve");
-const formSubmit = document.querySelector("input[type='submit']");
-
-// Form elements
+//DOM Inputs
 const firstName = document.getElementById("firstname");
 const lastName = document.getElementById("lastname");
 const mail = document.getElementById("mail");
@@ -188,12 +170,7 @@ const quantity = document.getElementById("quantity");
 const tournois = document.querySelectorAll("input[type=radio]");
 const cgu = document.getElementById("cgu");
 
-
-
- 
 // Validations functions
-
-
 const validationForm = () => {
   validateInputText(firstName);
 
@@ -210,10 +187,15 @@ const validationForm = () => {
   validateCheckbox(cgu);
 }
 
+//Errors display/hide
+const formData = document.querySelectorAll(".formData");
+
 const createErrorElement = (inputName) => {
+  //Create p tag with error-message class
   const errorDOMElement = document.createElement("p");
   errorDOMElement.className = "error-message";
 
+  //Append error message 
   const message = document.createTextNode(errorsForm[inputName]);
 
   const targetFormData = document.querySelector("." + inputName + "-formData");
@@ -233,10 +215,17 @@ const manageErrorMessage = () => {
 }
 
 const submitForm = () => {
-  if(errorsForm.length === 0){
+  console.log("errors count:  " + Object.keys(errorsForm).length);
+  if(Object.keys(errorsForm).length === 0) {
     reserveForm.submit();
-  }
+  } 
 }
+
+//Submit form  fields are valid
+const reserveForm = document.getElementById("reserve");
+const formSubmit = document.querySelector("input[type='submit']");
+
+
 
 
 
@@ -250,9 +239,4 @@ formSubmit.addEventListener("click", function(e) {
  manageErrorMessage();
 
  submitForm();
-
-  
-  console.log(errorsForm)
-
-  //Submit form if it's valid
 }, false);
