@@ -26,6 +26,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 const closeModal = () => {
   modalbg.style.display= "none";
+  validationMessage.style.display = "none";
 }
 closeModalBtn.forEach(closeModalBtn => closeModalBtn.addEventListener("click", closeModal));
 
@@ -158,36 +159,17 @@ const validateCheckbox = input => {
 //*********************************************************************//
 
 
-//DOM Inputs
-const firstName = document.getElementById("firstname");
-const lastName = document.getElementById("lastname");
-const mail = document.getElementById("mail");
-const birthDate = document.getElementById("birthdate");
-const quantity = document.getElementById("quantity");
-const tournois = document.querySelectorAll("input[type=radio]");
-const cgu = document.getElementById("cgu");
-
-// Validations functions
-const validationForm = () => {
-  validateInputText(firstName);
-
-  validateInputText(lastName);
-
-  
-}
-
-//Errors display/hide
-const createErrorElement = (inputName, errorMessage) => {
+//ERRORS*******************************************************************
+  //Create error element
+  const createErrorElement = (inputName, errorMessage) => {
   //Create p tag with error-message class
   const errorDOMElement = document.createElement("p");
   errorDOMElement.className = "error-message";
 
-  //Append error message 
-  const message = document.createTextNode(errorMessage);
-
-  const targetFormData = document.querySelector("." + inputName + "-formData");
+  const message = document.createTextNode(errorMessage); //Create messsage and append to errorElement
   errorDOMElement.appendChild(message);
 
+  const targetFormData = document.querySelector("." + inputName + "-formData"); // Target right formData and append errorElement
   targetFormData.appendChild(errorDOMElement);
 }
 
@@ -199,22 +181,28 @@ const cleanAllFormErrors = () => {
 
 //Manage error. Map on all error and send to createErrorElement
 const manageErrorMessage = (errors) => {
-  errors.map(error => {
-    createErrorElement(Object.keys(error), error[Object.keys(error)])
-  });
+  errors.map(error => createErrorElement(Object.keys(error), error[Object.keys(error)]));
 }
 
 const validationMessage = document.querySelector(".form-validation-message");
 const submitForm = () => {
+  reserveForm.reset();
   if(Object.keys(errorsForm).length === 0) {
     validationMessage.style.display = "flex"
   } 
 }
 
-
+//Form listener***************************************************************************
 const reserveForm = document.getElementById("reserve");
 const formSubmit = document.querySelector("input[type='submit']");
-
+//DOM Inputs
+const firstName = document.getElementById("firstname");
+const lastName = document.getElementById("lastname");
+const mail = document.getElementById("mail");
+const birthDate = document.getElementById("birthdate");
+const quantity = document.getElementById("quantity");
+const tournois = document.querySelectorAll("input[type=radio]");
+const cgu = document.getElementById("cgu");
 
 formSubmit.addEventListener("click", function(e) {
   e.preventDefault();
@@ -237,5 +225,6 @@ formSubmit.addEventListener("click", function(e) {
     return;
   }
 
- /*submitForm();*/
+ submitForm();
+
 }, false);
