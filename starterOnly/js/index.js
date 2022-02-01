@@ -15,7 +15,7 @@ const burgerDisplay = () => {
 
 //*********************RESERVATION FORM***********************************
 const modalbg = document.querySelector(".bground");
-const closeModalBtn = document.getElementById("close-modal-btn");
+const closeModalBtn = document.querySelectorAll(".close-modal")
 const modalBtn = document.querySelectorAll(".modal-btn");
 
 // Hide/Reveal modal
@@ -27,7 +27,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 const closeModal = () => {
   modalbg.style.display= "none";
 }
-closeModalBtn.addEventListener("click", closeModal);
+closeModalBtn.forEach(closeModalBtn => closeModalBtn.addEventListener("click", closeModal));
 
 
 //VALIDATION RESERVATION FORM
@@ -45,14 +45,15 @@ const errorMessages = {
 }
 
 const validationRules = {
-  length: 2,
+  name: /^(?=.{2,50}$)[a-zÀ-ÿ]+(?:['-\s][a-zÀ-ÿ]+)*$/gi, //Min 2 chars. Accents, ' and - allowed and insensitive case
   mailRegex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   dateRegex: /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/,
   quantityRegex: /^(0?[0-9]|[1-9][0-9])$/
 }
 
 //Validation functions
-
+const notEmpty = v => !!v;
+const errors ={};
 //Remove error message from errorsForm
 const removeFromErrorsForm = input => {
   delete errorsForm[input.name];
@@ -61,33 +62,18 @@ const removeFromErrorsForm = input => {
 //****************************SINGLE TESTS****************************//
 //Test if is empty
 const isNotEmpty = (input) => {
-  if(!input.value){
-    errorsForm[input.name] = errorMessages.isRequired; 
-    console.log(errorsForm)
-  } else {
-    removeFromErrorsForm(input);
-  }
   return !!input.value;
-}
-
-//Test if text has min length
-const hasMinLength = input => {
-  if(input.value.length < validationRules.length) {
-    errorsForm[input.name] = errorMessages.minLength;
-  } else {
-    removeFromErrorsForm(input);
-  }
 }
 
 //Test regex
 const matchRegex = (input, inputRegex, errorMessage) => {
   const regex = new RegExp(inputRegex);
   if(!regex.test(input.value)){
-    errorsForm[input.name] = errorMessage;
+    const error = {};
+    error[input.name] = errorMessage;
+    return error;
   }
-  else {
-    removeFromErrorsForm(input);
-  }
+  return null;
 }
 
 //Test range date
@@ -98,10 +84,11 @@ const dateRange = input => {
 
   //Age must be lower than 100years and higher than 5 years
   if(new Date(input.value) <= new Date(year - 100, month, day + 1) || new Date(input.value) > new Date(year - 5, month, day + 1)){
-    errorsForm[input.name] = errorMessages.dateRange;
-  } else {
-    removeFromErrorsForm(input);
-  }
+    const error = {}
+    error[input.name] = errorMessages.dateRange;
+    return error;
+  } 
+  return null;
 }
 //*********************************************************************//
 
@@ -111,52 +98,62 @@ const dateRange = input => {
 
 //Validation text input = not empty + has min length
 const validateInputText = input => {
-  if(!isNotEmpty(input)){
-    return false;
+  if (!isNotEmpty(input)) {
+    const error = {};
+    error[input.name] = errorMessages.isRequired;
+    return error;
   }
-  hasMinLength(input);
+  return matchRegex(input,validationRules.name, errorMessages.minLength);
 }
 
 //Validation mail = not empty + valid mail
 const validateMail = input => {
-  if(!isNotEmpty(input)){
-    return false;
+  if (!isNotEmpty(input)) {
+    const error = {};
+    error[input.name] = errorMessages.isRequired;
+    return error;
   }
-  matchRegex(input, validationRules.mailRegex, errorMessages.invalidMail);
+  return matchRegex(input, validationRules.mailRegex, errorMessages.invalidMail);
 }
 
 //Validation birthdate = not empty and in range
 const validateBirthdate = input => {
-  if(!isNotEmpty(input)) {
-    return false;
+  if (!isNotEmpty(input)) {
+    const error = {};
+    error[input.name] = errorMessages.isRequired;
+    return error;
   }
-  dateRange(input);
+  return dateRange(input);
 }
 
 //Validate quantity = not empty and in range
 const validateQuantity = input => {
-  if(!isNotEmpty(input)){
-    return false;
+  if (!isNotEmpty(input)) {
+    const error = {};
+    error[input.name] = errorMessages.isRequired;
+    return error;
   }
-  matchRegex(input, validationRules.quantityRegex, errorMessages.invalidQuantity)
+  return matchRegex(input, validationRules.quantityRegex, errorMessages.invalidQuantity)
 }
 
 //Validate tournoi
 const validateRadio = input => {
   if(!Object.values(input).some(element => element.checked)){
-    errorsForm[input[0].name] = errorMessages.optionRequired; 
-  } else {
-    removeFromErrorsForm(input[0]);
-  }
+    const error = {};
+    error[input[0].name] = errorMessages.optionRequired;
+    return error;
+  } 
+  return null;
 }
 
 //Validate CGU
 const validateCheckbox = input => {
   if(!input.checked){
-    errorsForm[input.name] = errorMessages[input.name + "Unchecked"];
-  } else {
-    removeFromErrorsForm(input);
-  }  
+    const error = {};
+    error[input.name] = errorMessages[input.name + "Unchecked"];
+    return error;
+  } 
+  return null;
 } 
 //*********************************************************************//
 
@@ -176,67 +173,69 @@ const validationForm = () => {
 
   validateInputText(lastName);
 
-  validateMail(mail)
-
-  validateBirthdate(birthDate);
-
-  validateQuantity(quantity);
-
-  validateRadio(tournois);
-
-  validateCheckbox(cgu);
+  
 }
 
 //Errors display/hide
-const formData = document.querySelectorAll(".formData");
-
-const createErrorElement = (inputName) => {
+const createErrorElement = (inputName, errorMessage) => {
   //Create p tag with error-message class
   const errorDOMElement = document.createElement("p");
   errorDOMElement.className = "error-message";
 
   //Append error message 
-  const message = document.createTextNode(errorsForm[inputName]);
+  const message = document.createTextNode(errorMessage);
 
   const targetFormData = document.querySelector("." + inputName + "-formData");
   errorDOMElement.appendChild(message);
 
   targetFormData.appendChild(errorDOMElement);
-
 }
 
-const manageErrorMessage = () => {
+//Remove all errors
+const cleanAllFormErrors = () => {
   const errorsDisplayed = document.querySelectorAll(".error-message");
-  errorsDisplayed.forEach(element => element.remove());
-
-  for(const inputName in errorsForm){
-    createErrorElement(inputName);
-  }
+  errorsDisplayed?.forEach(element => element.remove());
 }
 
+//Manage error. Map on all error and send to createErrorElement
+const manageErrorMessage = (errors) => {
+  errors.map(error => {
+    createErrorElement(Object.keys(error), error[Object.keys(error)])
+  });
+}
+
+const validationMessage = document.querySelector(".form-validation-message");
 const submitForm = () => {
-  console.log("errors count:  " + Object.keys(errorsForm).length);
   if(Object.keys(errorsForm).length === 0) {
-    reserveForm.submit();
+    validationMessage.style.display = "flex"
   } 
 }
 
-//Submit form  fields are valid
+
 const reserveForm = document.getElementById("reserve");
 const formSubmit = document.querySelector("input[type='submit']");
-
-
-
 
 
 formSubmit.addEventListener("click", function(e) {
   e.preventDefault();
 
-  //Run validation functions
- validationForm();
+  cleanAllFormErrors();
 
- //Display/Hide error message
- manageErrorMessage();
+  const errors = [
+    validateInputText(firstName),
+    validateInputText(lastName),
+    validateMail(mail),
+    validateBirthdate(birthDate),
+    validateQuantity(quantity),
+    validateRadio(tournois),
+    validateCheckbox(cgu)
+  ].filter(notEmpty);
 
- submitForm();
+  if(errors.length > 0) {
+    // Form not valid
+    manageErrorMessage(errors);
+    return;
+  }
+
+ /*submitForm();*/
 }, false);
