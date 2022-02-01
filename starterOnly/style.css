@@ -8,6 +8,7 @@
   --f64: 4rem;
   --f48: 3rem;
   --f40: 2.5rem;
+  --f36: 2.25rem;
   --f24: 1.5rem;
   --f20: 1.25rem;
   --f18: 1.125rem;
@@ -411,6 +412,32 @@ input[data-error]::after {
   color: #fff;
   cursor: pointer;
   border: 0;
+}
+
+.form-validation-message {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #232323;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: none;
+}
+
+.form-validation-message.display-message {
+  display: block;
+}
+
+.form-validation-message p{
+  font-size: var(--f36);
+  text-align: center;
+  margin-top: 50%;
+}
+.form-validation-message input {
+  margin: auto auto 1.1rem;
 }
 /* custom select styles */
 .custom-select {
