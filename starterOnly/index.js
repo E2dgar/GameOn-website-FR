@@ -10,16 +10,18 @@ const burgerDisplay = () => {
 } 
 //*********************************************************
 
-//**TODO body overflow y hidden when modal open to prevent double scroll */
+
 
 //*********************RESERVATION FORM***********************************
 const modalbg = document.querySelector(".bground");
 const closeModalBtn = document.querySelectorAll(".close-modal")
 const modalBtn = document.querySelectorAll(".modal-btn");
+const body = document.querySelector("body");
 
 // Hide/Reveal modal
 const launchModal = () => {
   modalbg.style.display = "block";
+  body.style.overflowY = "hidden"; // Prevent double scroll when modal launch
 }
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
@@ -35,7 +37,7 @@ let errorsForm = [];
 
 const errorMessages = {
   isRequired: "Ce champs est requis",
-  text: "Veuillez entrez au moins 2 caractères pour ce champs. Les chiffres ne sont pas acceptés.",
+  text: "Veuillez entrez au moins 2 caractères pour ce champs.(chiffres non acceptés, un seul espace entre les mots).",
   invalidMail: "Veuillez entrez une adresse mail valide",
   dateRange: "Les tournois sont ouverts aux personnes agés de 5 à 99 ans",
   invalidQuantity: "Veuillez entrer une valeur entre 0 et 99",
@@ -175,7 +177,7 @@ const manageErrorMessage = (errors) => {
 
 const validationMessage = document.querySelector(".form-validation-message");
 const submitForm = () => {
-  reserveForm.reset(); //submit when backend
+  reserveForm.reset(); //submit when backend for datas
   validationMessage.style.display = "flex"; 
 }
 
