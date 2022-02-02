@@ -5,13 +5,12 @@ const burgerDisplay = () => {
   if (header.className === "topnav") {
     header.className += " responsive";
   } else {
-
     header.className = "topnav";
   }
 } 
 //*********************************************************
 
-
+//**TODO body overflow y hidden when modal open to prevent double scroll */
 
 //*********************RESERVATION FORM***********************************
 const modalbg = document.querySelector(".bground");
@@ -42,7 +41,6 @@ const errorMessages = {
   invalidQuantity: "Veuillez entrer une valeur entre 0 et 99",
   optionRequired: "Veuillez choisir une option",
   cguUnchecked: "Vous devez acceptez les conditions d'utilisation pour continuer"
-
 }
 
 const validationRules = {
@@ -52,19 +50,10 @@ const validationRules = {
   quantityRegex: /^(0?[0-9]|[1-9][0-9])$/
 }
 
-//Validation functions
-const notEmpty = v => !!v;
-const errors ={};
-//Remove error message from errorsForm
-const removeFromErrorsForm = input => {
-  delete errorsForm[input.name];
-}
 
 //****************************SINGLE TESTS****************************//
 //Test if is empty
-const isNotEmpty = (input) => {
-  return !!input.value;
-}
+const notEmpty = v => !!v;
 
 //Test regex
 const matchRegex = (input, inputRegex, errorMessage) => {
@@ -83,7 +72,7 @@ const dateRange = input => {
   const month = new Date().getMonth();
   const day = new Date().getDate();
 
-  //Age must be lower than 100years and higher than 5 years
+  //Age must be lower than 100 years and higher than 5 years
   if(new Date(input.value) <= new Date(year - 100, month, day + 1) || new Date(input.value) > new Date(year - 5, month, day + 1)){
     const error = {}
     error[input.name] = errorMessages.dateRange;
@@ -91,25 +80,23 @@ const dateRange = input => {
   } 
   return null;
 }
-//*********************************************************************//
-
 
 
 //****************************INPUTS TESTS****************************//
 
 //Validation text input = not empty + has min length
 const validateInputText = input => {
-  if (!isNotEmpty(input)) {
+  if (!notEmpty(input.value)) {
     const error = {};
     error[input.name] = errorMessages.isRequired;
     return error;
   }
-  return matchRegex(input,validationRules.name, errorMessages.minLength);
+  return matchRegex(input, validationRules.name, errorMessages.minLength);
 }
 
 //Validation mail = not empty + valid mail
 const validateMail = input => {
-  if (!isNotEmpty(input)) {
+  if (!notEmpty(input.value)) {
     const error = {};
     error[input.name] = errorMessages.isRequired;
     return error;
@@ -119,7 +106,7 @@ const validateMail = input => {
 
 //Validation birthdate = not empty and in range
 const validateBirthdate = input => {
-  if (!isNotEmpty(input)) {
+  if (!notEmpty(input.value)) {
     const error = {};
     error[input.name] = errorMessages.isRequired;
     return error;
@@ -129,7 +116,7 @@ const validateBirthdate = input => {
 
 //Validate quantity = not empty and in range
 const validateQuantity = input => {
-  if (!isNotEmpty(input)) {
+  if (!notEmpty(input.value)) {
     const error = {};
     error[input.name] = errorMessages.isRequired;
     return error;
@@ -156,10 +143,9 @@ const validateCheckbox = input => {
   } 
   return null;
 } 
-//*********************************************************************//
 
 
-//ERRORS*******************************************************************
+//*****************************ERRORS**************************************
   //Create error element
   const createErrorElement = (inputName, errorMessage) => {
   //Create p tag with error-message class
@@ -186,13 +172,11 @@ const manageErrorMessage = (errors) => {
 
 const validationMessage = document.querySelector(".form-validation-message");
 const submitForm = () => {
-  reserveForm.reset();
-  if(Object.keys(errorsForm).length === 0) {
-    validationMessage.style.display = "flex"
-  } 
+  reserveForm.reset(); //submit when backend
+  validationMessage.style.display = "flex"; 
 }
 
-//Form listener***************************************************************************
+//*******************************Form listener********************************************
 const reserveForm = document.getElementById("reserve");
 const formSubmit = document.querySelector("input[type='submit']");
 //DOM Inputs
@@ -225,6 +209,6 @@ formSubmit.addEventListener("click", function(e) {
     return;
   }
 
- submitForm();
+  submitForm();
 
 }, false);
