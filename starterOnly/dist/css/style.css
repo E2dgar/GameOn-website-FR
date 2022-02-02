@@ -374,6 +374,7 @@ input[data-error]::after {
 .error-message {
   color: var(--primary-color);
   margin: 0;
+  font-size: 1rem;
 }
 
 .close {

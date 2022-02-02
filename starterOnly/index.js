@@ -35,7 +35,7 @@ let errorsForm = [];
 
 const errorMessages = {
   isRequired: "Ce champs est requis",
-  minLength: "Veuillez entrez au moins 2 caractères pour ce champs",
+  text: "Veuillez entrez au moins 2 caractères pour ce champs. Les chiffres ne sont pas acceptés.",
   invalidMail: "Veuillez entrez une adresse mail valide",
   dateRange: "Les tournois sont ouverts aux personnes agés de 5 à 99 ans",
   invalidQuantity: "Veuillez entrer une valeur entre 0 et 99",
@@ -44,8 +44,8 @@ const errorMessages = {
 }
 
 const validationRules = {
-  name: /^(?=.{2,50}$)[a-zÀ-ÿ]+(?:['-\s][a-zÀ-ÿ]+)*$/gi, //Min 2 chars. Accents, ' and - allowed and insensitive case
-  mailRegex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+  name: /^(?=.{2,50}$)[a-zÀ-ÿ]+(?:['-\s][a-zÀ-ÿ]+)*$/gi, //Min 2 chars. Accents, ' , -  are allowed and insensitive case
+  mailRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   dateRegex: /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/,
   quantityRegex: /^(0?[0-9]|[1-9][0-9])$/
 }
@@ -55,13 +55,18 @@ const validationRules = {
 //Test if is empty
 const notEmpty = v => !!v;
 
+//Function for return an error Object
+const errorObjectReturn = (inputName, errorMessage) => {
+  const error = {};
+  error[inputName] = errorMessage;
+  return error;
+}
+
 //Test regex
 const matchRegex = (input, inputRegex, errorMessage) => {
   const regex = new RegExp(inputRegex);
   if(!regex.test(input.value)){
-    const error = {};
-    error[input.name] = errorMessage;
-    return error;
+    return errorObjectReturn(input.name, errorMessage);
   }
   return null;
 }
@@ -87,11 +92,9 @@ const dateRange = input => {
 //Validation text input = not empty + has min length
 const validateInputText = input => {
   if (!notEmpty(input.value)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+    return errorObjectReturn(input.name, errorMessages.isRequired);
   }
-  return matchRegex(input, validationRules.name, errorMessages.minLength);
+  return matchRegex(input, validationRules.name, errorMessages.text);
 }
 
 //Validation mail = not empty + valid mail
