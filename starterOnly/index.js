@@ -13,23 +13,33 @@ const burgerDisplay = () => {
 
 
 //*********************RESERVATION FORM***********************************
-const modalbg = document.querySelector(".bground");
+const modal = document.querySelector(".modal");
 const closeModalBtn = document.querySelectorAll(".close-modal")
 const modalBtn = document.querySelectorAll(".modal-btn");
 const body = document.querySelector("body");
 
-// Hide/Reveal modal
+// Hide/Reveal modal and confirm
 const launchModal = () => {
-  modalbg.style.display = "block";
-  body.style.overflowY = "hidden"; // Prevent double scroll when modal launch
+  modal.classList.add("display");
+  body.classList.add("hidden-scroll"); // Prevent double scroll when modal launch
 }
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 const closeModal = () => {
-  modalbg.style.display= "none";
-  validationMessage.style.display = "none";
+  modal.classList.remove("display");
+  body.classList.remove("hidden-scroll");
 }
 closeModalBtn.forEach(closeModalBtn => closeModalBtn.addEventListener("click", closeModal));
+
+
+const validationMessage = document.querySelector(".form-validation-message");
+/**
+ * Display confirmation message
+ */
+const displayConfirm = () => {
+  validationMessage.classList.add("display");
+}
+
 
 
 //VALIDATION RESERVATION FORM
@@ -206,13 +216,12 @@ const manageErrorMessage = (errors) => {
   errors.map(error => createErrorElement(Object.keys(error), error[Object.keys(error)]));
 }
 
-const validationMessage = document.querySelector(".form-validation-message");
 /**
  * On submit = submit form and display confirmation message
  */
 const submitForm = () => {
-  reserveForm.reset(); //submit when backend for datas
-  validationMessage.style.display = "flex"; 
+  reserveForm.reset(); 
+  displayConfirm();
 }
 
 //*******************************Form listener********************************************
@@ -245,7 +254,6 @@ const validateForm = (e) => {
     validateRadio(tournois),
     validateCheckbox(cgu)
   ].filter(notEmpty);
-  console.log(errors)
 
   if(errors.length > 0) {
     // Form not valid
@@ -255,4 +263,5 @@ const validateForm = (e) => {
 
   submitForm();
 }
-formSubmit.addEventListener("click", event => validateForm(event), false);
+
+formSubmit.addEventListener("click", event => validateForm(event));
