@@ -27,6 +27,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 const closeModal = () => {
   modal.classList.remove("display");
+  validationMessage.classList.remove("display");
   body.classList.remove("hidden-scroll");
 }
 closeModalBtn.forEach(closeModalBtn => closeModalBtn.addEventListener("click", closeModal));

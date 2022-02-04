@@ -146,7 +146,7 @@ button:hover {
 
 .content {
   margin: 5% auto;
-  width: 95%;
+  width: 100%;
   max-width: 555px;
   animation-name: modalopen;
   animation-duration: var(--modal-duration);
