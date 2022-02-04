@@ -53,27 +53,42 @@ const validationRules = {
 }
 
 
-//****************************SINGLE TESTS****************************//
+//****************************TESTS FUNCTIONS****************************//
 //Test if is empty
 const notEmpty = v => !!v;
 
-//Function for return an error Object
-const errorObjectReturn = (inputName, errorMessage) => {
+/**
+ * Create an object
+ * @param {string} inputName
+ * @param {string} errorMessage
+ * @returns {object}
+ */
+const createKeyValueObject = (inputName, errorMessage) => {
   const error = {};
   error[inputName] = errorMessage;
   return error;
 }
 
-//Test regex
+/**
+ *  Test if input value match regex
+ * @param {object} input 
+ * @param {string} inputRegex 
+ * @param {string} errorMessage 
+ * @returns {object|null} Object error or null
+ */
 const matchRegex = (input, inputRegex, errorMessage) => {
   const regex = new RegExp(inputRegex);
   if(!regex.test(input.value)){
-    return errorObjectReturn(input.name, errorMessage);
+    return createKeyValueObject(input.name, errorMessage);
   }
   return null;
 }
 
-//Test range date
+/**
+ * Test if date is in range
+ * @param {object} input 
+ * @returns {object|null} Object error or null
+ */
 const dateRange = input => {
   const year = new Date().getFullYear();
   const month = new Date().getMonth();
@@ -81,78 +96,91 @@ const dateRange = input => {
 
   //Age must be lower than 100 years and higher than 5 years
   if(new Date(input.value) <= new Date(year - 100, month, day + 1) || new Date(input.value) > new Date(year - 5, month, day + 1)){
-    const error = {}
-    error[input.name] = errorMessages.dateRange;
-    return error;
+    return createKeyValueObject(input.name, errorMessages.dateRange);
   } 
   return null;
 }
 
-
-//****************************INPUTS TESTS****************************//
-
-//Validation text input = not empty + has min length
+/**
+ * Test input text = not empty and match regex
+ * @param {object} input 
+ * @returns {object|null} Object error or null
+ */
 const validateInputText = input => {
   if (!notEmpty(input.value)) {
-    return errorObjectReturn(input.name, errorMessages.isRequired);
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return matchRegex(input, validationRules.name, errorMessages.text);
 }
 
-//Validation mail = not empty + valid mail
+/** Test input mail = not empty + valid mail
+ *  @param {object} input
+ *  @returns {object|null} Error Object or null 
+ */
 const validateMail = input => {
   if (!notEmpty(input.value)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return matchRegex(input, validationRules.mailRegex, errorMessages.invalidMail);
 }
 
-//Validation birthdate = not empty and in range
+/**
+ * Test input birthDate = not empty + date in range
+ * @param {object} input 
+ * @returns {object|null} Error Object or null
+ */
 const validateBirthdate = input => {
   if (!notEmpty(input.value)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return dateRange(input);
 }
 
+/**
+ * Test input number
+ * @param {object} input 
+ * @returns {object|null} Error Object or null
+ */
 //Validate quantity = not empty and in range
 const validateQuantity = input => {
   if (!notEmpty(input.value)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return matchRegex(input, validationRules.quantityRegex, errorMessages.invalidQuantity)
 }
 
-//Validate tournoi
-const validateRadio = input => {
-  if(!Object.values(input).some(element => element.checked)){
-    const error = {};
-    error[input[0].name] = errorMessages.optionRequired;
-    return error;
+/**
+ * Test if one radio is checked
+ * @param {object} inputGroup 
+ * @returns {object|null} Error Object or null
+ */
+const validateRadio = inputGroup => {
+  if(!Object.values(inputGroup).some(element => element.checked)){
+    return createKeyValueObject(inputGroup[0].name, errorMessages.optionRequired);
   } 
   return null;
 }
 
-//Validate CGU
+/**
+ * Test checkbox
+ * @param {object} input 
+ * @returns {object|null} Error Object or null
+ */
 const validateCheckbox = input => {
   if(!input.checked){
-    const error = {};
-    error[input.name] = errorMessages[input.name + "Unchecked"];
-    return error;
+    return createKeyValueObject(input.name, errorMessages[input.name + "Unchecked"]);
   } 
   return null;
 } 
 
 
 //*****************************ERRORS**************************************
-  //Create error element
-  const createErrorElement = (inputName, errorMessage) => {
+/**
+ * Create error element and append in DOM
+ * @param {string} inputName 
+ * @param {string} errorMessage 
+ */
+const createErrorElement = (inputName, errorMessage) => {
   //Create p tag with error-message class
   const errorDOMElement = document.createElement("p");
   errorDOMElement.className = "error-message";
@@ -164,18 +192,24 @@ const validateCheckbox = input => {
   targetFormData.appendChild(errorDOMElement);
 }
 
-//Remove all errors
+/** Remove all errors messages in DOM */
 const cleanAllFormErrors = () => {
   const errorsDisplayed = document.querySelectorAll(".error-message");
   errorsDisplayed?.forEach(element => element.remove());
 }
 
-//Manage error. Map on all error and send to createErrorElement
+/**
+ * Loop on errors and send each error to createErrorElement
+ * @param {Array} errors 
+ */
 const manageErrorMessage = (errors) => {
   errors.map(error => createErrorElement(Object.keys(error), error[Object.keys(error)]));
 }
 
 const validationMessage = document.querySelector(".form-validation-message");
+/**
+ * On submit = submit form and display confirmation message
+ */
 const submitForm = () => {
   reserveForm.reset(); //submit when backend for datas
   validationMessage.style.display = "flex"; 
@@ -193,7 +227,11 @@ const quantity = document.getElementById("quantity");
 const tournois = document.querySelectorAll("input[type=radio]");
 const cgu = document.getElementById("cgu");
 
-formSubmit.addEventListener("click", function(e) {
+/**
+ * Validation process on submit
+ * @param {event} e
+ */
+const validateForm = (e) => {
   e.preventDefault();
 
   cleanAllFormErrors();
@@ -207,6 +245,7 @@ formSubmit.addEventListener("click", function(e) {
     validateRadio(tournois),
     validateCheckbox(cgu)
   ].filter(notEmpty);
+  console.log(errors)
 
   if(errors.length > 0) {
     // Form not valid
@@ -215,5 +254,5 @@ formSubmit.addEventListener("click", function(e) {
   }
 
   submitForm();
-
-}, false);
+}
+formSubmit.addEventListener("click", event => validateForm(event), false);
