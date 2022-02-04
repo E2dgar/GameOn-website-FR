@@ -296,7 +296,6 @@ input {
 
 .form-validation-message {
   position: absolute;
-  min-height: 90vh;
   top: 50px;
   right: 0;
   bottom: 0;
