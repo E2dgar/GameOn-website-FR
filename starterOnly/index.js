@@ -5,7 +5,6 @@ const burgerDisplay = () => {
   if (header.className === "topnav") {
     header.className += " responsive";
   } else {
-
     header.className = "topnav";
   }
 } 
@@ -14,21 +13,34 @@ const burgerDisplay = () => {
 
 
 //*********************RESERVATION FORM***********************************
-const modalbg = document.querySelector(".bground");
+const modal = document.querySelector(".modal");
 const closeModalBtn = document.querySelectorAll(".close-modal")
 const modalBtn = document.querySelectorAll(".modal-btn");
+const body = document.querySelector("body");
 
-// Hide/Reveal modal
+// Hide/Reveal modal and confirm
 const launchModal = () => {
-  modalbg.style.display = "block";
+  modal.classList.add("display");
+  body.classList.add("hidden-scroll"); // Prevent double scroll when modal launch
 }
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 const closeModal = () => {
-  modalbg.style.display= "none";
-  validationMessage.style.display = "none";
+  modal.classList.remove("display");
+  validationMessage.classList.remove("display");
+  body.classList.remove("hidden-scroll");
 }
 closeModalBtn.forEach(closeModalBtn => closeModalBtn.addEventListener("click", closeModal));
+
+
+const validationMessage = document.querySelector(".form-validation-message");
+/**
+ * Display confirmation message
+ */
+const displayConfirm = () => {
+  validationMessage.classList.add("display");
+}
+
 
 
 //VALIDATION RESERVATION FORM
@@ -36,132 +48,150 @@ let errorsForm = [];
 
 const errorMessages = {
   isRequired: "Ce champs est requis",
-  minLength: "Veuillez entrez au moins 2 caractères pour ce champs",
+  text: "Veuillez entrez au moins 2 caractères pour ce champs.(chiffres non acceptés, un seul espace entre les mots).",
   invalidMail: "Veuillez entrez une adresse mail valide",
   dateRange: "Les tournois sont ouverts aux personnes agés de 5 à 99 ans",
   invalidQuantity: "Veuillez entrer une valeur entre 0 et 99",
   optionRequired: "Veuillez choisir une option",
   cguUnchecked: "Vous devez acceptez les conditions d'utilisation pour continuer"
-
 }
 
 const validationRules = {
-  name: /^(?=.{2,50}$)[a-zÀ-ÿ]+(?:['-\s][a-zÀ-ÿ]+)*$/gi, //Min 2 chars. Accents, ' and - allowed and insensitive case
-  mailRegex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+  name: /^(?=.{2,50}$)[a-zÀ-ÿ]+(?:['-\s][a-zÀ-ÿ]+)*$/gi, //Min 2 chars. Accents, ' , -  are allowed and insensitive case
+  mailRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   dateRegex: /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/,
   quantityRegex: /^(0?[0-9]|[1-9][0-9])$/
 }
 
-//Validation functions
-const notEmpty = v => !!v;
-const errors ={};
-//Remove error message from errorsForm
-const removeFromErrorsForm = input => {
-  delete errorsForm[input.name];
-}
 
-//****************************SINGLE TESTS****************************//
+//****************************TESTS FUNCTIONS****************************//
 //Test if is empty
-const isNotEmpty = (input) => {
-  return !!input.value;
+const notEmpty = v => !!v;
+
+/**
+ * Create an object
+ * @param {string} inputName
+ * @param {string} errorMessage
+ * @returns {object}
+ */
+const createKeyValueObject = (inputName, errorMessage) => {
+  const error = {};
+  error[inputName] = errorMessage;
+  return error;
 }
 
-//Test regex
+/**
+ *  Test if input value match regex
+ * @param {object} input 
+ * @param {string} inputRegex 
+ * @param {string} errorMessage 
+ * @returns {object|null} Object error or null
+ */
 const matchRegex = (input, inputRegex, errorMessage) => {
   const regex = new RegExp(inputRegex);
   if(!regex.test(input.value)){
-    const error = {};
-    error[input.name] = errorMessage;
-    return error;
+    return createKeyValueObject(input.name, errorMessage);
   }
   return null;
 }
 
-//Test range date
+/**
+ * Test if date is in range
+ * @param {object} input 
+ * @returns {object|null} Object error or null
+ */
 const dateRange = input => {
   const year = new Date().getFullYear();
   const month = new Date().getMonth();
   const day = new Date().getDate();
 
-  //Age must be lower than 100years and higher than 5 years
+  //Age must be lower than 100 years and higher than 5 years
   if(new Date(input.value) <= new Date(year - 100, month, day + 1) || new Date(input.value) > new Date(year - 5, month, day + 1)){
-    const error = {}
-    error[input.name] = errorMessages.dateRange;
-    return error;
+    return createKeyValueObject(input.name, errorMessages.dateRange);
   } 
   return null;
 }
-//*********************************************************************//
 
-
-
-//****************************INPUTS TESTS****************************//
-
-//Validation text input = not empty + has min length
+/**
+ * Test input text = not empty and match regex
+ * @param {object} input 
+ * @returns {object|null} Object error or null
+ */
 const validateInputText = input => {
-  if (!isNotEmpty(input)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+  if (!notEmpty(input.value)) {
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
-  return matchRegex(input,validationRules.name, errorMessages.minLength);
+  return matchRegex(input, validationRules.name, errorMessages.text);
 }
 
-//Validation mail = not empty + valid mail
+/** Test input mail = not empty + valid mail
+ *  @param {object} input
+ *  @returns {object|null} Error Object or null 
+ */
 const validateMail = input => {
-  if (!isNotEmpty(input)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+  if (!notEmpty(input.value)) {
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return matchRegex(input, validationRules.mailRegex, errorMessages.invalidMail);
 }
 
-//Validation birthdate = not empty and in range
+/**
+ * Test input birthDate = not empty + date in range
+ * @param {object} input 
+ * @returns {object|null} Error Object or null
+ */
 const validateBirthdate = input => {
-  if (!isNotEmpty(input)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+  if (!notEmpty(input.value)) {
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return dateRange(input);
 }
 
+/**
+ * Test input number
+ * @param {object} input 
+ * @returns {object|null} Error Object or null
+ */
 //Validate quantity = not empty and in range
 const validateQuantity = input => {
-  if (!isNotEmpty(input)) {
-    const error = {};
-    error[input.name] = errorMessages.isRequired;
-    return error;
+  if (!notEmpty(input.value)) {
+    return createKeyValueObject(input.name, errorMessages.isRequired);
   }
   return matchRegex(input, validationRules.quantityRegex, errorMessages.invalidQuantity)
 }
 
-//Validate tournoi
-const validateRadio = input => {
-  if(!Object.values(input).some(element => element.checked)){
-    const error = {};
-    error[input[0].name] = errorMessages.optionRequired;
-    return error;
+/**
+ * Test if one radio is checked
+ * @param {object} inputGroup 
+ * @returns {object|null} Error Object or null
+ */
+const validateRadio = inputGroup => {
+  if(!Object.values(inputGroup).some(element => element.checked)){
+    return createKeyValueObject(inputGroup[0].name, errorMessages.optionRequired);
   } 
   return null;
 }
 
-//Validate CGU
+/**
+ * Test checkbox
+ * @param {object} input 
+ * @returns {object|null} Error Object or null
+ */
 const validateCheckbox = input => {
   if(!input.checked){
-    const error = {};
-    error[input.name] = errorMessages[input.name + "Unchecked"];
-    return error;
+    return createKeyValueObject(input.name, errorMessages[input.name + "Unchecked"]);
   } 
   return null;
 } 
-//*********************************************************************//
 
 
-//ERRORS*******************************************************************
-  //Create error element
-  const createErrorElement = (inputName, errorMessage) => {
+//*****************************ERRORS**************************************
+/**
+ * Create error element and append in DOM
+ * @param {string} inputName 
+ * @param {string} errorMessage 
+ */
+const createErrorElement = (inputName, errorMessage) => {
   //Create p tag with error-message class
   const errorDOMElement = document.createElement("p");
   errorDOMElement.className = "error-message";
@@ -173,26 +203,29 @@ const validateCheckbox = input => {
   targetFormData.appendChild(errorDOMElement);
 }
 
-//Remove all errors
+/** Remove all errors messages in DOM */
 const cleanAllFormErrors = () => {
   const errorsDisplayed = document.querySelectorAll(".error-message");
   errorsDisplayed?.forEach(element => element.remove());
 }
 
-//Manage error. Map on all error and send to createErrorElement
+/**
+ * Loop on errors and send each error to createErrorElement
+ * @param {Array} errors 
+ */
 const manageErrorMessage = (errors) => {
   errors.map(error => createErrorElement(Object.keys(error), error[Object.keys(error)]));
 }
 
-const validationMessage = document.querySelector(".form-validation-message");
+/**
+ * On submit = submit form and display confirmation message
+ */
 const submitForm = () => {
-  reserveForm.reset();
-  if(Object.keys(errorsForm).length === 0) {
-    validationMessage.style.display = "flex"
-  } 
+  reserveForm.reset(); 
+  displayConfirm();
 }
 
-//Form listener***************************************************************************
+//*******************************Form listener********************************************
 const reserveForm = document.getElementById("reserve");
 const formSubmit = document.querySelector("input[type='submit']");
 //DOM Inputs
@@ -204,7 +237,11 @@ const quantity = document.getElementById("quantity");
 const tournois = document.querySelectorAll("input[type=radio]");
 const cgu = document.getElementById("cgu");
 
-formSubmit.addEventListener("click", function(e) {
+/**
+ * Validation process on submit
+ * @param {event} e
+ */
+const validateForm = (e) => {
   e.preventDefault();
 
   cleanAllFormErrors();
@@ -225,6 +262,7 @@ formSubmit.addEventListener("click", function(e) {
     return;
   }
 
- submitForm();
+  submitForm();
+}
 
-}, false);
+formSubmit.addEventListener("click", event => validateForm(event));
