@@ -454,40 +454,8 @@ footer {
     padding: 0;
     margin: 0;
   }
-  .hero-section {
-    display: block;
-    background: var(--white);
-    box-shadow: unset;
-  }
-  .hero-content {
-    background: var(--white);
-    color: var(--black);
-    padding: 0;
-  }
-  .hero-content .btn-signup {
-    display: none;
-  }
-  
-  .hero-img img {
-    border-radius: 10px;
-    margin-top: 2rem;
-  }
-  .hero-section > .btn-signup {
-    display: block;
-    margin: 32px auto 10px;
-    padding: 12px 35px;
-  }
 
-  .copyrights {
-    margin: 0;
-    text-align: center;
-  }
-}
-
-@media screen and (max-width: 768px){
-  .header-logo img {
-    max-width: 103px;
-  }
+  /*Header*/
   .topnav a {display: none;}
   .topnav a.icon {
     display: block;
@@ -527,16 +495,46 @@ footer {
     display: block;
   }
 
+  .header-logo img {
+    max-width: 103px;
+  }
+
+  /*Hero*/
+  .hero-section {
+    display: block;
+    background: var(--white);
+    box-shadow: unset;
+  }
+  .hero-content {
+    background: var(--white);
+    color: var(--black);
+    padding: 0;
+  }
   .hero-headline {
     white-space: normal;
     margin-bottom: 1rem;
   }
+  .hero-content .btn-signup {
+    display: none;
+  }
   .hero-text {
-   width: 100%;
-   margin-top: 57px;
+    margin-top: 0;
+    width: 100%;
+  }
+  
+  .hero-img img {
+    border-radius: 10px;
+    margin-top: 2rem;
+  }
+  .hero-section > .btn-signup {
+    display: block;
+    margin: 32px auto 10px;
+    padding: 12px 35px;
   }
 
   .copyrights {
+    margin: 0;
+    text-align: center;
     font-size: var(--f10);
   }
 }
