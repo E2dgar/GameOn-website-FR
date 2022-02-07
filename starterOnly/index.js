@@ -214,7 +214,7 @@ const cleanAllFormErrors = () => {
  * @param {Array} errors 
  */
 const manageErrorMessage = (errors) => {
-  errors.map(error => createErrorElement(Object.keys(error), error[Object.keys(error)]));
+  errors.map(error => createErrorElement(Object.keys(error), Object.values(error)));
 }
 
 /**
